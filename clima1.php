@@ -1,5 +1,4 @@
 <?php
-  $categoria_actual = 'clima';
   include 'conexion.php';
   include 'menu.php';
 
@@ -27,7 +26,6 @@ $query = "SELECT * FROM propuestas_noticias WHERE estado = 'aprobada' AND catego
   $stmt->close();
   $conexion->close();
 ?>
-<script src="buscador.js" defer></script>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -183,7 +181,6 @@ $query = "SELECT * FROM propuestas_noticias WHERE estado = 'aprobada' AND catego
 </head>
 <body>
   <div class="contenido-principal">
-    <div id="contenedor-noticias">
       <?php if (!empty($termino_busqueda)): ?>
         <div class="resultados-busqueda">
           <p>Resultados de búsqueda para: <strong><?= htmlspecialchars($termino_busqueda) ?></strong></p>
@@ -221,7 +218,6 @@ $query = "SELECT * FROM propuestas_noticias WHERE estado = 'aprobada' AND catego
         <?php endforeach; ?>
       <?php endif; ?>
     </div>
-  </div>
 
     <script>
       let lastScroll = 0;

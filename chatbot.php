@@ -1,12 +1,65 @@
-
 <?php
+
+if (session_status() === PHP_SESSION_NONE ){
+    session_start();
+}
+
 $usuario_logueado = isset($_SESSION['usuario_id']);
 $nombre_usuario = $_SESSION['usuario_nombre'] ?? 'Invitado';
+$imagen_usuario = $_SESSION['usuario_imagen'] ?? 'imagenes/avatar-default.png';
 $pagina_actual = basename($_SERVER['PHP_SELF']);
 $mostrar_login = !$usuario_logueado && $pagina_actual === 'home.php';
-$foto_usuario = $_SESSION['usuario_foto'] ?? 'imagenes/default_user.png';
-$foto_chatbot = 'imagenes/chatbot_avatar.png';
 ?>
+
+<button class="boton-ayuda" onclick="toggleAsistente()">¿Necesita ayuda?</button>
+
+<div class="asistente-container" id="asistente">
+    <div class="asistente-header">
+        Asistente virtual
+        <button class="cerrar" onclick="toggleAsistente()">X</button>
+    </div>
+
+    <div class="asistente-body" id="chat-cuerpo">
+        <?php if(!$usuario_logueado): ?>
+            <p style="text-align: center;">¡Hola! Para acceder al chat, primero debes registrate o iniciar sesion</p>
+            <div style="text-align: center; margin-top: 10px; font-weight: bold;">
+                <img src="imagenes/chatbot.png" alt="ChatBot" style="width: 120px; height: auto; " />
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="login.php"
+                    style="display: inline-block;
+                        background-color: #0d5c9b;
+                        color: white;
+                        padding: 10px 20px;
+                        text-decoration: none;
+                        border-radius: 4px;
+                        font-weight: bold;">
+                    Iniciar Sesion
+                </a>
+            </div>
+        <?php else: ?>
+            <div style="text-align: center; margin-top: 10px;">
+                <img src="imagenes/chatbot.png" alt="ChatBot" style="width: 100px; height: auto; margin-bottom: 10px;">
+            </div>
+            <div class="mensaje">
+                <strong>ChatBot</strong><br>
+                Hola,<strong><?= htmlspecialchars($nombre_usuario) ?></strong> En que puedo ayudarte?
+            </div>
+            <div class="asistente-opciones">
+                <button onclick="enviarPregunta(this)" data-pregunta="¿Como se envia una noticia?">¿Como se envia una noticia?</button>
+                <button onclick="enviarPregunta(this)" data-pregunta="¿Como se reporta una noticia?">¿Como se reporta una noticia?</button>
+                <button onclick="enviarPregunta(this)" data-pregunta="¿Cuales son las politicas del periodico digital?">¿Cuales con las politicas del periodico digital?</button>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <?php if ($usuario_logueado): ?>
+        <div class="asistente-input">
+            <input type="text" id="entradaUsuario" placeholder="Escribe un mensaje..,"/>
+            <button onclick="procesarEntrada()">Enviar</button>
+        </div>
+    <?php endif; ?>
+    </div>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -20,15 +73,16 @@ $foto_chatbot = 'imagenes/chatbot_avatar.png';
     }
     .boton-ayuda {
         position: fixed;
-        bottom: 20px;
+        bottom: 1px;
         left: 20px;
         background-color: #0d5c9b;
         color: white;
         border: none;
-        border-radius: 8px 8px 0 0;
+        border-radius: 10px 10px 0 0;
         padding: 12px 20px;
         cursor: pointer;
         z-index: 1000;
+        font-weight: bold;
     }
 
     .asistente-container {
@@ -129,60 +183,7 @@ $foto_chatbot = 'imagenes/chatbot_avatar.png';
 </style>
 
 </head>
-<body>
 
- <button class="boton-ayuda" onclick="toggleAsistente()" style="
-            position: fixed;
-            bottom: 0px;
-            left: 20px;
-            background-color: #0d5c9b;
-            color: white;
-            padding: 12px 20px;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            z-index: 1000;
-            display: inline-block;
-             ">¿Necesitas ayuda?</button>
-             
-<div class="asistente-container" id="asistente">
-    <div class="asistente-header">
-        <title>Asistente Virtual</title>
-        <button class="cerrar" onclick="toggleAsistente()" style>X</button>
-    </div>
-    <div class="asistente-body">
-        <?php if ($mostrar_login): ?>
-            <p style="margin: 0 0 10px;">Para acceder al chat primero debes iniciar sesion</p>
-            <form method="POST" action="login.php">
-                <label>Correo:</label>
-                <input type="email" name="correo" required style="width: 100%; margin-bottom: 8px;">
-                <label>Contraseña:</label>
-                <input type="password" name="contrasena" required style="width:100%; margin-bottom: 8px;">
-                <button type="submit" style="width: 100%; background: #0d5c9b; color:white; padding: 10px; border:none ;">Ingresar</button>
-            </form>
-        <?php else: ?>
-            <div class="mensaje">
-                <strong>ChatBot</strong><br>
-                Hola, <strong><?= htmlspecialchars($nombre_usuario) ?></strong> En que puedo ayudarte?
-            </div>
-            <div class="asistente-opciones">
-                <button onclick="enviarPregunta(this)" data-pregunta="¿Como se envia una noticia?">¿Como se envia una noticia?</button>
-                <button onclick="enviarPregunta(this)" data-pregunta="¿Como se reporta una noticia?">¿Como se reporta una noticia?</button>
-                <button onclick="enviarPregunta(this)" data-pregunta="¿Cuales son las politicas del periodico digital?">¿Cuales son las politicas del periodico digital?</button>
-            </div>
-        <?php endif; ?>
-    </div>
-    <?php if (!$mostrar_login): ?>
-    <div class="asistente-input">
-        <input type="text" id="entradaUsuario" placeholder="Escribe un mensaje..."/>
-        <button onclick="procesarEntrada()">Enviar</button>
-    </div>
-    <?php endif; ?>
-</div>
 
 <script>
     function toggleAsistente() {
@@ -268,7 +269,7 @@ $foto_chatbot = 'imagenes/chatbot_avatar.png';
         } else if (pregunta.includes("ok") || pregunta.includes("esta bien")) {
             return "Genial, me alegra que la informacion sea util";
 
-        } else if (pregunta.includes("como") || pregunta.includes("noticia")) {
+        } else if (pregunta.includes("como hago publica una noticia") || pregunta.includes("noticia publica")) {
             return "Solo los administradores pueden hacer las noticias publicas, si deceas que una noticia se haga publica, debes enviar una noticia desde el boton 'Enviar noticia' de esta forma un administrador la revisara para luego hacerla publica.";
 
         } else if (pregunta.includes("solo") || pregunta.includes("reportar")) {
@@ -278,13 +279,13 @@ $foto_chatbot = 'imagenes/chatbot_avatar.png';
             return "Puedes cambiar tu contraseña las veces que lo desees. Te gustaria saber como acceder a los ajustes para realizar un cambio de contraseña?"
         
         } else if (pregunta.includes("si") || pregunta.includes("contraseña")) {
-            return "Perfecto. Para acceder a la configuracion debes acceder al icono de y dar clic en 'configura perfil' una vez en la vista tendras un apartado donde podras hacer el cambio de tu contraseña. Pero deberas ingresar tu contraseña actual para realizar el cambio.";
-
-        } else if (pregunta.includes("quien es ") || pregunta.includes("enrique")) {
-            return "Enrique es uno de los Scrum Master de este periodico digital, tambien conocido como KIKE, vive en Jiquilisco y su sueño es trabajar en una ruta de buses. Te gustaria que te filtre toda su informacion personal?";
+            return "Perfecto. Para acceder a la configuracion debes acceder al icono de y dar clic en 'configura perfil' una vez en la vista tendras un apartado donde podras hacer el cambio de tu contraseña. Pero deberas ingresar tu contraseña actual para realizar el cambio."
         
-        
+        } else if (pregunta.includes("gracias") || pregunta.includes("por")) {
+            return "Denada. ¡Un gusto de ayudarte!"
         }
+
+
 
         return "Lo siento, no entendi tu mensaje. ¿Podrias intentar con otra pregunta?";
     }

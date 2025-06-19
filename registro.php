@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $mail->setFrom('TUCORREO@gmail.com', 'Comunicado Digital');
                     $mail->addAddress($correo);
         
-                    $verificar_url = "http://192.168.1.9:8080/Engine-Team/verificar.php?token=" . $token;//link que permite validar el registro
+                    $verificar_url = "http://192.168.48.211/Engine-Team/verificar.php?token=" . $token;//link que permite validar el registro
         
                     $mail->isHTML(true);
                     $mail->Subject = 'Verifica tu cuenta';
@@ -360,8 +360,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
 
             <div class="botones">
-                <button type="button"><img src="imagenes/google.png" alt="Google">Continuar con Google</button>
-                <button type="button"><img src="imagenes/outlook.png" alt="Outlook">Continuar con Outlook</button>
+                <a href="google-login.php" style="text-decoration: none;">
+                    <button type="button"><img src="imagenes/google.png" alt="Google">Continuar con Google</button>
+                </a>
+                <a href="outlook-login.php" style="text-decoration: none;">
+                    <button type="button"><img src="imagenes/outlook.png" alt="Outlook">Continuar con Outlook</button>
+                </a>
             </div>
 
             <div class="terminos">

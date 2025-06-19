@@ -1,5 +1,4 @@
 <?php
-$categoria_actual = 'deportes';
 include 'menu.php';
 include 'conexion.php';
 
@@ -30,7 +29,7 @@ $noticias = $resultado->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 $conexion->close();
 ?>
-<script src="buscador.js" defer></script>
+
 <?php
 echo "<pre>ROL ACTUAL: " . $_SESSION['usuario_rol'] . "</pre>";
 ?>
@@ -189,7 +188,6 @@ echo "<pre>ROL ACTUAL: " . $_SESSION['usuario_rol'] . "</pre>";
 </head>
 <body>
   <div class="contenido-principal">
-    <div id="contenedor-noticias">
       <?php if (!empty($termino_busqueda)): ?>
         <div class="resultados-busqueda">
           <p>Resultados de búsqueda para: <strong><?= htmlspecialchars($termino_busqueda) ?></strong></p>
@@ -227,7 +225,6 @@ echo "<pre>ROL ACTUAL: " . $_SESSION['usuario_rol'] . "</pre>";
         <?php endforeach; ?>
       <?php endif; ?>
     </div>
-  </div>
 
     <script>
       let lastScroll = 0;

@@ -11,12 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'] ?? null;
 
     if ($id) {
-        $stmt = $conexion->prepare("UPDATE reportesdenuncias SET estado = 'revisado' WHERE id = ?");
+        $stmt = $conexion->prepare("UPDATE propuestas_denuncias SET estado = 'rechazada' WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
     }
 }
 
-header("Location: revision_reportes_denuncias.php");
+header("Location: revision_denuncias.php");
 exit();
 ?>

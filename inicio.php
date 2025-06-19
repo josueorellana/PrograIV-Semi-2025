@@ -1,5 +1,4 @@
 <?php
-  $categoria_actual = 'inicio';
   session_start();
   include 'menu.php';
   include 'conexion.php';
@@ -36,7 +35,7 @@ $noticias = $resultado->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 $conexion->close();
 ?>
-<script src="buscador.js" defer></script>
+
 <?php
 echo "<pre>ROL ACTUAL: " . $_SESSION['usuario_rol'] . "</pre>";
 ?>
@@ -147,26 +146,27 @@ echo "<pre>ROL ACTUAL: " . $_SESSION['usuario_rol'] . "</pre>";
       color: #666;
     }
     .Buscador {
-      position: relative;
-      width: 200px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-
+    .Buscador img {
+      width: 20px; 
+      height: 20px;
+    }
     .Buscador input {
-      width: 100%;
-      padding: 8px 8px 8px 35px;
+      padding: 8px 12px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      box-sizing: border-box;
+      font-size: 14px;
     }
-
-    .Buscador img {
-      position: absolute;
-      top: 50%;
-      left: 10px;
-      transform: translateY(-50%);
-      width: 16px;
-      height: 16px;
-      pointer-events: none;
+    .Buscador button {
+      padding: 8px 12px;
+      background-color: #0d5c9b; 
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
     .menu-configuracion {
       position: relative;
@@ -272,7 +272,6 @@ echo "<pre>ROL ACTUAL: " . $_SESSION['usuario_rol'] . "</pre>";
 </head>
 <body>
   <div class="contenido-principal">
-    <div id="contenedor-noticias">
       <?php if (!empty($termino_busqueda)): ?>
         <div class="resultados-busqueda">
           <p>Resultados de búsqueda para: <strong><?= htmlspecialchars($termino_busqueda) ?></strong></p>
@@ -317,7 +316,6 @@ echo "<pre>ROL ACTUAL: " . $_SESSION['usuario_rol'] . "</pre>";
         <?php endforeach; ?>
       <?php endif; ?>
     </div>
-  </div>
     <?php if ($_SESSION['usuario_rol'] === 'Administrador'): ?>
       <a href="publicar_noticia.php" class="boton-publicar">Publicar Noticia</a>
     <?php endif; ?>
